@@ -1,5 +1,5 @@
 import pytest
-from .repositories import IProductRepository, IChatRepository
+from src.domain.repositories import IProductRepository, IChatRepository
 
 
 class TestIProductRepository:
