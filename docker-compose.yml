@@ -1,4 +1,5 @@
-services:api:
+services:
+  api:
     build:
       context: .
       dockerfile: Dockerfile
