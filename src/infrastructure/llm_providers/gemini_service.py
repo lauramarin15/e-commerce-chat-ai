@@ -4,6 +4,7 @@ from src.domain.entities import Product, ChatContext
 from src.domain.exceptions import ChatServiceError
 
 
+
 class GeminiService:
     """Servicio de IA usando Google Gemini."""
 

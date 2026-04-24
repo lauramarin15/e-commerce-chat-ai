@@ -4,6 +4,7 @@ from src.domain.entities import Product
 from src.infrastructure.db.models import ProductModel
 
 
+
 class SQLProductRepository(IProductRepository):
     """Implementación concreta de IProductRepository usando SQLAlchemy."""
 
