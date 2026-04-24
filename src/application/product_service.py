@@ -2,7 +2,7 @@ from typing import List
 from src.domain.repositories import IProductRepository
 from src.domain.entities import Product
 from src.domain.exceptions import ProductNotFoundError
-from src.application.dtos.product_dto import ProductRequestDTO
+from src.application.dtos import ProductDTO
 
 
 class ProductService:
@@ -35,7 +35,7 @@ class ProductService:
 
         return self._product_repo.get_all()
 
-    def create_product(self, product_dto: ProductRequestDTO) -> Product:
+    def create_product(self, product_dto: ProductDTO) -> Product:
         """Convierte el DTO a entidad y la persiste."""
         product = Product(
             id=None,
@@ -50,7 +50,7 @@ class ProductService:
         )
         return self._product_repo.save(product)
 
-    def update_product(self, product_id: int, product_dto: ProductRequestDTO) -> Product:
+    def update_product(self, product_id: int, product_dto: ProductDTO) -> Product:
         """Valida que exista y actualiza con los nuevos datos."""
         existing = self._product_repo.get_by_id(product_id)
         if not existing:

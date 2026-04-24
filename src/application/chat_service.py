@@ -1,15 +1,19 @@
-from src.domain.repositories import IProductRepository, IChatRepository, 
+from src.domain.repositories import IProductRepository, IChatRepository 
+from src.infrastructure.llm_providers.gemini_service import GeminiService
+from src .application.dtos import ChatMessageRequestDTO, ChatMessageResponseDTO
+from typing import Optional, List
+from src.domain.entities import ChatMessage, ChatContext
 
 class ChatService:
-     """Servicio de Ichat"""
-     
+    """Servicio de Ichat"""
+    
     def __init__(self, chat_repository: IChatRepository,product_repository: IProductRepository, ai_service: GeminiService):
         """Recibe el chat por inyección de dependencias."""
         self._chat_repo = chat_repository
         self._product_repo = product_repository
-        self._ai_service = ai_service
+        self._ai_service = ai_service  
         
-    async def process_message(self request: ChatMessageRequestDTO) -> ChatMessageResponseDTO:
+    async def process_message(self, request: ChatMessageRequestDTO) -> ChatMessageResponseDTO:
         """flujo para procesar mensajes"""
         try:
             products = self._product_repo.get_all()
@@ -60,7 +64,3 @@ class ChatService:
     def clear_session_history(self, session_id: str) -> int:
         """Elimina todos los mensajes de una sesión."""
         return self._chat_repo.delete_session_history(session_id)
-
-        
-        
-    
