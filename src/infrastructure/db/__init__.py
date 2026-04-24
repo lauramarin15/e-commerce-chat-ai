@@ -1,4 +1,4 @@
-from src.infrastructure.database.config import SessionLocal
+from src.infrastructure.db.database import SessionLocal
 from src.infrastructure.db.models import ProductModel
 
 def load_initial_data() -> None:
