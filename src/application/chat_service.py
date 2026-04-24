@@ -3,11 +3,13 @@ from src.infrastructure.llm_providers.gemini_service import GeminiService
 from src .application.dtos import ChatMessageRequestDTO, ChatMessageResponseDTO
 from typing import Optional, List
 from src.domain.entities import ChatMessage, ChatContext
+from src.domain.exceptions import ChatServiceError
+from datetime import datetime
 
 class ChatService:
     """Servicio de Ichat"""
     
-    def __init__(self, chat_repository: IChatRepository,product_repository: IProductRepository, ai_service: GeminiService):
+    def __init__(self,product_repository: IProductRepository, chat_repository: IChatRepository ,ai_service: GeminiService):
         """Recibe el chat por inyección de dependencias."""
         self._chat_repo = chat_repository
         self._product_repo = product_repository
@@ -50,7 +52,8 @@ class ChatService:
             
             return ChatMessageResponseDTO(
                 session_id=request.session_id,
-                message=ai_response,
+                user_message=request.message,
+                assistant_message=ai_response,
                 timestamp=assistant_message.timestamp,
             )
 
