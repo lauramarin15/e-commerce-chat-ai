@@ -1,6 +1,8 @@
-from sqlalchemy import create_engine, sessionmake,  declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
+from typing import Generator
 
-URL = sqlite:///./data/ecommerce_chat.db
+URL = "sqlite:///./data/ecommerce_chat.db"
 
 engine = create_engine(
     URL, connect_args={"check_same_thread": False},
