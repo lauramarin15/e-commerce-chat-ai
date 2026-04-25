@@ -10,9 +10,10 @@ Estas clases contienen la lógica de negocio central y son independientes
 de cualquier framework o base de datos.
 """
 
+
 @dataclass
 class Product:
-   """
+    """
     Entidad que representa un producto en el e-commerce.
 
     Esta clase encapsula la lógica de negocio relacionada con productos,
@@ -29,7 +30,7 @@ class Product:
         stock (int): Cantidad disponible en inventario.
         description (str): Descripción detallada del producto.
     """
-    
+
     id: Optional[int]
     name: str
     brand: str
@@ -60,7 +61,7 @@ class Product:
     def is_available(self) -> bool:
         """
         Retorna True si el producto tiene stock disponible
-        
+
         Retorna:
             bool: True si el stock es mayor a 0, False en caso contrario.
 
@@ -77,7 +78,7 @@ class Product:
         - Valida que quantity sea positivo
         - Valida que haya suficiente stock
         - Lanza ValueError si no se puede reducir
-        
+
         Args:
             quantity (int): Cantidad a reducir. Debe ser positiva.
 
@@ -99,7 +100,7 @@ class Product:
         """
         Aumenta el stock del producto
         - Valida que quantity sea positivo
-        
+
         Args:
             quantity (int): Cantidad a aumentar. Debe ser positiva.
 
@@ -120,7 +121,7 @@ class Product:
 class ChatMessage:
     """
     Entidad que representa un mensaje en el chat.
-    
+
     Almacena un mensaje individual de la conversación, ya sea del
     usuario o del asistente de IA.
 
@@ -144,7 +145,7 @@ class ChatMessage:
         - role debe ser 'user' o 'assistant'
         - message no puede estar vacío
         - session_id no puede estar vacío
-        
+
          Raises:
             ValueError: Si el rol es inválido, el mensaje está vacío
                         o el session_id está vacío.
@@ -177,7 +178,7 @@ class ChatContext:
     Atributos:
         messages (list): Lista de mensajes de la conversación.
         max_messages (int): Número máximo de mensajes a considerar.
-        
+
     """
 
     messages: list[ChatMessage]
@@ -197,7 +198,7 @@ class ChatContext:
         Asistente: respuesta del asistente
         Usuario: otro mensaje
         ..."
-        
+
         Construye un string con el historial en formato legible
         que la IA puede usar como contexto.
 
@@ -208,7 +209,7 @@ class ChatContext:
             >>> context.format_for_prompt()
             "User: Busco zapatos\\nAssistant: Tenemos varias opciones."
 
- 
+
         """
         role_label = {"user": "User", "assistant": "Assistant"}
         lines = [

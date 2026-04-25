@@ -17,7 +17,7 @@ class ProductDTO(BaseModel):
     DTO para transferir datos de productos.
     Pydantic valida automáticamente los tipos.
 
-    Attributes:
+    Atributos:
         id (Optional[int]): Identificador único. None para productos nuevos.
         name (str): Nombre del producto.
         brand (str): Marca del producto.
@@ -74,10 +74,10 @@ class ProductDTO(BaseModel):
 
 class ChatMessageRequestDTO(BaseModel):
     """DTO para recibir mensajes del usuario
-     Valida que el mensaje y el session_id no estén vacíos
+    Valida que el mensaje y el session_id no estén vacíos
     ni contengan solo espacios en blanco.
 
-     Atributos:
+    Atributos:
         session_id (str): Identificador único de la sesión de chat.
         message (str): Contenido del mensaje del usuario.
 
@@ -90,9 +90,9 @@ class ChatMessageRequestDTO(BaseModel):
 
     @validator("message")
     def message_not_empty(cls, v):
-        """Valida que el mensaje no esté vacío"""
+        """Valida que el mensaje no esté vacío
 
-        """verificamos que el campo no sea solo espacios
+        verificamos que el campo no sea solo espacios
         Args:
             v (str): Valor del mensaje a validar.
 

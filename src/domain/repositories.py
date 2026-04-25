@@ -8,7 +8,7 @@ de cualquier base de datos o framework de persistencia.
 
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from src.entities import Product, ChatMessage
+from src.domain.entities import Product, ChatMessage
 
 
 class IProductRepository(ABC):
