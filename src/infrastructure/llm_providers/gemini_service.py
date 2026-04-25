@@ -1,15 +1,41 @@
+"""
+Módulo del servicio de IA usando Google Gemini.
+
+Implementa la integración con la API de Google Gemini para generar
+respuestas contextuales basadas en el catálogo de productos y el
+historial de conversación del usuario.
+"""
+
 import os
 import google.generativeai as genai
 from src.domain.entities import Product, ChatContext
 from src.domain.exceptions import ChatServiceError
 
 
-
 class GeminiService:
-    """Servicio de IA usando Google Gemini."""
+    """Servicio de IA usando Google Gemini.
+    Gestiona la comunicación con la API de Google Gemini para generar
+    respuestas inteligentes sobre productos de zapatos, usando el
+    catálogo disponible y el historial de conversación como contexto.
+
+    Atributos:
+        model (GenerativeModel): Instancia del modelo Gemini configurado.
+
+    Ejemplo:
+        >>> service = GeminiService()
+        >>> response = await service.generate_response(
+        ...     user_message="Busco zapatillas Nike",
+        ...     products=products,
+        ...     context=context,
+        ... )
+    """
 
     def __init__(self):
-        """Carga la API key y configura el modelo."""
+        """Carga la API key y configura el modelo.
+        Raises:
+            ValueError: Si la variable de entorno GEMINI_API_KEY
+                        no está definida.
+        """
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             raise ValueError("GEMINI_API_KEY no encontrada en variables de entorno.")
@@ -23,7 +49,31 @@ class GeminiService:
         products: list[Product],
         context: ChatContext,
     ) -> str:
-        """Genera una respuesta usando Gemini."""
+        """Genera una respuesta usando Gemini.
+        Construye un prompt con el catálogo de productos, el historial
+        de conversación y el mensaje actual del usuario, luego llama
+        a la API de Gemini para generar una respuesta coherente.
+
+        Args:
+            user_message (str): Mensaje actual del usuario.
+            products (list[Product]): Lista de productos del catálogo.
+            context (ChatContext): Contexto con el historial de conversación.
+
+        Retorna:
+            str: Respuesta generada por el modelo de IA.
+
+        Raises:
+            ChatServiceError: Si ocurre un error al llamar a la API de Gemini.
+
+        Ejemplo:
+            >>> response = await service.generate_response(
+            ...     user_message="¿Tienen Nike talla 42?",
+            ...     products=products,
+            ...     context=context,
+            ... )
+            >>> print(response)
+            "Sí, tenemos Nike Air Max 90 en talla 42..."
+        """
         try:
             # 1. Formatear productos y contexto
             products_text = self.format_products_info(products)
@@ -59,9 +109,21 @@ class GeminiService:
         except Exception as e:
             raise ChatServiceError(f"Error al llamar a Gemini: {str(e)}") from e
 
-
     def format_products_info(self, products: list[Product]) -> str:
-        """Convierte la lista de productos a texto legible para el prompt."""
+        """Convierte la lista de productos a texto legible para el prompt.
+
+        Args:
+            products (list[Product]): Lista de productos a formatear.
+
+        Retorna:
+            str: Texto con el catálogo formateado, o mensaje indicando
+                 que no hay productos disponibles.
+
+        Ejemplo:
+            >>> text = service.format_products_info(products)
+            >>> print(text)
+            "- Air Max 90 | Nike | $120.00 | Talla: 42 | En stock (stock: 15)"
+        """
         if not products:
             return "No hay productos disponibles."
 
