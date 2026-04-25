@@ -2,14 +2,34 @@ from dataclasses import dataclass
 from typing import Optional
 from datetime import datetime
 
+"""
+Módulo de entidades del dominio.
+
+Define las entidades principales del negocio: Product, ChatMessage y ChatContext.
+Estas clases contienen la lógica de negocio central y son independientes
+de cualquier framework o base de datos.
+"""
 
 @dataclass
 class Product:
-    """
+   """
     Entidad que representa un producto en el e-commerce.
-    Contiene la lógica de negocio relacionada con productos.
-    """
 
+    Esta clase encapsula la lógica de negocio relacionada con productos,
+    incluyendo validaciones de precio, stock y disponibilidad.
+
+    Atributos:
+        id (Optional[int]): Identificador único del producto.
+        name (str): Nombre del producto.
+        brand (str): Marca del producto.
+        category (str): Categoría del producto.
+        size (str): Talla del producto.
+        color (str): Color del producto.
+        price (float): Precio en dólares, debe ser mayor a 0.
+        stock (int): Cantidad disponible en inventario.
+        description (str): Descripción detallada del producto.
+    """
+    
     id: Optional[int]
     name: str
     brand: str
@@ -40,6 +60,14 @@ class Product:
     def is_available(self) -> bool:
         """
         Retorna True si el producto tiene stock disponible
+        
+        Retorna:
+            bool: True si el stock es mayor a 0, False en caso contrario.
+
+        Ejemplo:
+            >>> product = Product(name="Air Max", stock=5, price=100, ...)
+            >>> product.is_available()
+            True
         """
         return self.stock > 0
 
@@ -49,6 +77,17 @@ class Product:
         - Valida que quantity sea positivo
         - Valida que haya suficiente stock
         - Lanza ValueError si no se puede reducir
+        
+        Args:
+            quantity (int): Cantidad a reducir. Debe ser positiva.
+
+        Raises:
+            ValueError: Si quantity es negativo o mayor al stock disponible.
+
+        Ejemplo:
+            >>> product.reduce_stock(3)
+            >>> print(product.stock)
+            7
         """
         if quantity <= 0:
             raise ValueError("Quanttity must be bigger than 0")
@@ -60,6 +99,17 @@ class Product:
         """
         Aumenta el stock del producto
         - Valida que quantity sea positivo
+        
+        Args:
+            quantity (int): Cantidad a aumentar. Debe ser positiva.
+
+        Raises:
+            ValueError: Si quantity es negativo o igual a 0.
+
+        Ejemplo:
+            >>> product.increase_stock(5)
+            >>> print(product.stock)
+            15
         """
         if quantity <= 0:
             raise ValueError("The increase must be positive")
@@ -70,6 +120,16 @@ class Product:
 class ChatMessage:
     """
     Entidad que representa un mensaje en el chat.
+    
+    Almacena un mensaje individual de la conversación, ya sea del
+    usuario o del asistente de IA.
+
+    Atributos:
+        id (Optional[int]): Identificador único del mensaje.
+        session_id (str): Identificador de la sesión de chat.
+        role (str): Rol del emisor, debe ser 'user' o 'assistant'.
+        message (str): Contenido del mensaje.
+        timestamp (datetime): Fecha y hora del mensaje.
     """
 
     id: Optional[int]
@@ -84,6 +144,10 @@ class ChatMessage:
         - role debe ser 'user' o 'assistant'
         - message no puede estar vacío
         - session_id no puede estar vacío
+        
+         Raises:
+            ValueError: Si el rol es inválido, el mensaje está vacío
+                        o el session_id está vacío.
         """
         if self.role not in ("user", "assistant"):
             raise ValueError("Rol must be 'user' or 'assistant'")
@@ -110,6 +174,10 @@ class ChatContext:
     """
     Value Object que encapsula el contexto de una conversación.
     Mantiene los mensajes recientes para dar coherencia al chat.
+    Atributos:
+        messages (list): Lista de mensajes de la conversación.
+        max_messages (int): Número máximo de mensajes a considerar.
+        
     """
 
     messages: list[ChatMessage]
@@ -129,8 +197,18 @@ class ChatContext:
         Asistente: respuesta del asistente
         Usuario: otro mensaje
         ..."
+        
+        Construye un string con el historial en formato legible
+        que la IA puede usar como contexto.
 
-        Pista: Itera sobre get_recent_messages() y construye el string
+        Retorna:
+            str: Historial formateado con roles y mensajes.
+
+        Ejemplo:
+            >>> context.format_for_prompt()
+            "User: Busco zapatos\\nAssistant: Tenemos varias opciones."
+
+ 
         """
         role_label = {"user": "User", "assistant": "Assistant"}
         lines = [

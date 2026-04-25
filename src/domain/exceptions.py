@@ -1,6 +1,10 @@
 """
 Excepciones específicas del dominio.
 Representan errores de negocio, no errores técnicos.
+
+Define las excepciones específicas del negocio que se lanzan
+cuando ocurren errores en la lógica de dominio y aplicación.
+Estas excepciones son independientes de cualquier framework.
 """
 
 
@@ -10,9 +14,16 @@ class ProductNotFoundError(Exception):
     - Debe aceptar un product_id opcional
     - Mensaje por defecto: "Producto no encontrado"
     - Si se pasa product_id: "Producto con ID {product_id} no encontrado"
+
+    Atributos:
+        message (str): Descripción del error con el ID buscado.
+
+    Ejemplo:
+        >>> raise ProductNotFoundError("Producto con id 99 no encontrado.")
     """
 
     def __init__(self, product_id: int = None):
+
         if product_id:
             self.message = f"Product with ID {product_id} not found"
         else:
